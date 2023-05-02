@@ -1,0 +1,17 @@
+{
+    "version": "0.0.1",
+    "themes": {
+        "whiteTheme": {
+            "colors": {
+                "bg": "transparent",
+                "textColor": "#000000",
+
+                "injectionBg": "#0081D5",
+                "injectionText": "#000000",
+                "injectionPadding": "4px",
+                "injectionBorderRadius": "4px",
+                "injectionFontWeight": "bold"
+            }
+        }
+    }
+}

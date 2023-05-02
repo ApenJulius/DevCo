@@ -1,0 +1,47 @@
+[
+    {
+        "urls": ["google.com", "https://www.example.com"],
+        "name": "hello world",
+        "version": "1.0.0",
+        "description": "hello world",
+
+        "scripts": [
+            {
+                "src": "data/cheat/scripts/helloWorld.js",
+                "async": false,
+                "module": false,
+                "destroy_when_complete": false
+            }
+        ],
+        "styles": [
+            {
+                "href": "data/cheat/styles/style.css"
+            }
+        ],
+        "devMode": true
+    },
+    {
+        "urls": ["https://games.cdn.famobi.com/html5games/o/om-nom-run/"],
+        "name": "Nom Run Hack",
+        "version": "1.0.0",
+        "description": "Simple Nom Run Hack",
+
+        "scripts": [
+            {
+                "src": "data/cheat/scripts/nomRunHack.js"
+            }
+        ]
+    },
+    {
+        "urls": ["https://www.pixelplush.dev/LudumDare46/"],
+        "name": "LudumDare46 Hack",
+        "version": "1.0.0",
+        "description": "Get your answer in seconds using LudumDare46 Hack",
+
+        "scripts": [
+            {
+                "src": "data/cheat/scripts/LudumDare46Hack.js"
+            }
+        ]
+    }
+]
