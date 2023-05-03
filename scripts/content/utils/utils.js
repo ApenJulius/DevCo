@@ -1,30 +1,56 @@
-async function logger(type, source) {
-    let styles = await getTheme("whiteTheme");
-    switch (type) {
-        case "injection":
-            console.log(
-                `%cInjection%c - ${source} at %c${currentTime()}%c`,
-                `background-color: ${styles.colors.injectionBg}; padding: ${styles.colors.injectionPadding}; border-radius: ${styles.colors.injectionBorderRadius}; font-weight: ${styles.colors.injectionFontWeight}; text-color: ${styles.colors.injectionText};`,
-                `background-color: ${styles.colors.bg}; color: ${styles.colors.textColor};`,
-                "color: #0081D5; font-weight: bold;",
-                `background-color: ${styles.colors.bg}; color: ${styles.colors.textColor};`
-            );
-            break;
-        case "warning":
-            console.log(
-                `%cWarning%c - ${source} at %c${currentTime()}%c`,
-                "color: #0081D5; font-weight: bold;"
-            );
-            break;
+async function logger(type, args) {
+  let colorStyle = await colorStyles();
+  let textTemplate = await textTemplates();
 
-        default:
-            console.log(`Injected ${source} at ${currentTime()}`);
-            break;
-    }
+  switch (type) {
+    case "injection":
+      console.log(
+        textTemplate.injectionText,
+        colorStyle.texts.injectionBubble,
+        colorStyle.texts.default,
+        colorStyle.texts.injectionRest,
+        args,
+        "color: #0081D5; font-weight: bold;",
+        currentTime(),
+
+        colorStyle.texts.normalRest
+      );
+      break;
+    case "devmode":
+      console.log(
+        textTemplate.devModeText,
+        colorStyle.texts.devModeBubble,
+        colorStyle.texts.default,
+        colorStyle.texts.devModeRest,
+        args
+      );
+      break;
+
+    case "listenermode":
+      console.log(
+        textTemplate.listenerModeText,
+        colorStyle.texts.listenerModeBubble,
+        colorStyle.texts.default,
+        colorStyle.texts.listenerModeRest,
+        args
+      );
+      break;
+
+    case "warning":
+      console.log(
+        `%cWarning%c - ${source} at %c${currentTime()}%c`,
+        "color: #0081D5; font-weight: bold;"
+      );
+      break;
+
+    default:
+      console.log(`Injected ${source} at ${currentTime()}`);
+      break;
+  }
 }
 
 function currentTime() {
-    const date = new Date();
-    const time = date.toLocaleTimeString();
-    return time;
+  const date = new Date();
+  const time = date.toLocaleTimeString();
+  return time;
 }

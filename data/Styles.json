@@ -1,17 +1,38 @@
 {
-    "version": "0.0.1",
-    "themes": {
-        "whiteTheme": {
-            "colors": {
-                "bg": "transparent",
-                "textColor": "#000000",
+  "version": "0.0.1",
+  "defaultTheme": "whiteTheme",
+  "themes": {
+    "whiteTheme": {
+      "texts": {
+        "injectionText": "%cInjection%c - %c%s at%c %s%c",
+        "devModeText": "%cDevMode%c - %c%s",
+        "listenerModeText": "%cListener%c - %c%s"
+      },
+      "colors": {
+        "bg": "transparent",
+        "textColor": "#fff",
 
-                "injectionBg": "#0081D5",
-                "injectionText": "#000000",
-                "injectionPadding": "4px",
-                "injectionBorderRadius": "4px",
-                "injectionFontWeight": "bold"
-            }
-        }
+        "injectionBg": "#009AFA",
+        "injectionForeground": "#66C4FF",
+        "injectionText": "#000000",
+        "injectionSecondaryText": "#717880",
+
+        "devModeBg": "#FF4DCF",
+        "devModeForeground": "#FFA3E7",
+        "devModeText": "#000000",
+        "devModeSecondaryText": "#717880",
+
+        "listenerModeBg": "#FFF700",
+        "listenerModeForeground": "#FFFB7A",
+        "listenerModeText": "#000000",
+        "listenerModeSecondaryText": "#717880",
+
+        "errorBg": "#FF0854",
+        "errorText": "#000000",
+        "errorPadding": "4px",
+        "errorBorderRadius": "4px",
+        "errorFontWeight": "bold"
+      }
     }
+  }
 }
