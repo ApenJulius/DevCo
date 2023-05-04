@@ -30,6 +30,7 @@ DevCo is a Chrome extension designed to help developers with various tasks. The 
 | Version Control Integration | Integrates with version control systems like Git to track changes | 6 | 9 | Developer panel | Yes |
 | API Documentation | Shows documentation for APIs used on a website | 8 | 7 | Browser window | No |
 | Browser Compatibility | Checks website compatibility with various browsers | 7 | 8 | Developer panel | No |
+| Custom Hotkeys | Allow users to customize keyboard shortcuts for frequently used features | 7 | 5 | Developer Panel | Yes |
 
 
 ## Tech Stack
