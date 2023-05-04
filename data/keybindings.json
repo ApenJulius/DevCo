@@ -1,0 +1,26 @@
+{
+    "hotkeys": [
+      {
+        "name": "Open DevTools",
+        "description": "Open the DevTools panel for the current tab",
+        "defaultKey": "Ctrl+Shift+I",
+        "key": "Ctrl+Shift+I",
+        "enabled": true
+      },
+      {
+        "name": "Toggle extension",
+        "description": "Toggle the extension on or off",
+        "defaultKey": "Ctrl+Shift+E",
+        "key": "e",
+        "enabled": true
+      },
+      {
+        "name": "Custom script",
+        "description": "Run a custom script on the current tab",
+        "defaultKey": "Alt+S",
+        "key": "Alt+S",
+        "enabled": true
+      }
+    ]
+  }
+  
