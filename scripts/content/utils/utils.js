@@ -56,6 +56,7 @@ function currentTime() {
 }
 
 async function sendMessageBackend(action, data) {
+  console.log("logging from backend");
   try {
     return new Promise((resolve, reject) => {
       if (!data) {
@@ -66,6 +67,7 @@ async function sendMessageBackend(action, data) {
         chrome.runtime.sendMessage(
           { action: action, data: data },
           function (response) {
+            console.log(response);
             resolve(response);
           }
         );

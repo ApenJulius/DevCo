@@ -1,9 +1,15 @@
+let isLoading = true;
+
 // TODO: Fix this event, currently does not work. Just records the keys.
 // ! Not working, creates a problem at start.
 const listenForKeybinds = (keybind, action) => {
   const keys = keybind.split("+");
 
-  document.addEventListener("keydown", (event) => {
+  const keyDownListener = (event) => {
+    if (isLoading) {
+      return;
+    }
+
     const pressedKeys = keys.map((key) => {
       let cusKey = key.toLowerCase();
       switch (cusKey) {
@@ -20,11 +26,27 @@ const listenForKeybinds = (keybind, action) => {
 
     if (pressedKeys.every((isPressed) => isPressed)) {
       if (action) {
-        console.log("Action works.");
+        console.log("Action works.", action);
         PREDEFINED_ACTIONS[action];
       }
     }
-  });
+  };
+
+  // Add the listener when the flag is true
+  if (!isLoading) {
+    document.addEventListener("keydown", keyDownListener);
+  }
+
+  return {
+    enable: () => {
+      isLoading = false;
+      document.addEventListener("keydown", keyDownListener);
+    },
+    disable: () => {
+      isLoading = true;
+      document.removeEventListener("keydown", keyDownListener);
+    },
+  };
 };
 
 const PREDEFINED_ACTIONS = {
