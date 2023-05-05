@@ -54,3 +54,25 @@ function currentTime() {
   const time = date.toLocaleTimeString();
   return time;
 }
+
+async function sendMessageBackend(action, data) {
+  try {
+    return new Promise((resolve, reject) => {
+      if (!data) {
+        chrome.runtime.sendMessage({ action: action }, function (response) {
+          resolve(response);
+        });
+      } else {
+        chrome.runtime.sendMessage(
+          { action: action, data: data },
+          function (response) {
+            resolve(response);
+          }
+        );
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
