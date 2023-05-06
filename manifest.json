@@ -1,41 +1,41 @@
 {
-  "manifest_version": 3,
-  "name": "DevCo",
-  "version": "1.0",
-  "description": "DevCo is a Chrome extension designed to help developers with various tasks. The extension includes a range of features to assist with coding, debugging, testing, and optimization of websites and web applications. With DevCo, you can improve your productivity and streamline your development workflow.",
+    "manifest_version": 3,
+    "name": "DevCo",
+    "version": "1.0",
+    "description": "DevCo is a Chrome extension designed to help developers with various tasks. The extension includes a range of features to assist with coding, debugging, testing, and optimization of websites and web applications. With DevCo, you can improve your productivity and streamline your development workflow.",
 
-  "host_permissions": ["*://*/*"],
-  "action": {
-    "default_popup": "popup/popup.html",
-    "default_title": "InjectSite"
-  },
-  "background": {
-    "service_worker": "scripts/background/service_worker.js"
-  },
-  "permissions": ["storage", "activeTab", "debugger", "scripting"],
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": [
-        "scripts/content/utils/Styles.js",
-        "scripts/content/utils/utils.js",
-        "scripts/content/utils/Keybinds.js",
-        "scripts/content/content_worker.js"
-      ]
-    }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": [
-        "data/cheats.json",
-        "data/cheat/scripts/*.js",
-        "data/cheat/styles/*.css",
+    "host_permissions": ["*://*/*"],
+    "action": {
+        "default_popup": "popup/popup.html",
+        "default_title": "InjectSite"
+    },
+    "background": {
+        "service_worker": "scripts/background/service_worker.js"
+    },
+    "permissions": ["storage", "activeTab", "debugger", "scripting"],
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": [
+                "scripts/content/utils/Styles.js",
+                "scripts/content/utils/utils.js",
+                "scripts/content/utils/Keybinds.js",
+                "scripts/content/content_worker.js"
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "data/configForCustom.json",
+                "data/custom/scripts/*.js",
+                "data/custom/styles/*.css",
 
-        "css/font-awesome/all.css",
-        "css/font-awesome/webfonts/*.woff2"
-      ],
-      "matches": ["<all_urls>"]
-    }
-  ],
-  "devtools_page": "devtools/devtools.html"
+                "css/font-awesome/all.css",
+                "css/font-awesome/webfonts/*.woff2"
+            ],
+            "matches": ["<all_urls>"]
+        }
+    ],
+    "devtools_page": "devtools/devtools.html"
 }
