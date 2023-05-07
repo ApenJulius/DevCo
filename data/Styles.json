@@ -1,38 +1,71 @@
 {
-  "version": "0.0.1",
-  "defaultTheme": "whiteTheme",
-  "themes": {
-    "whiteTheme": {
-      "texts": {
-        "injectionText": "%cInjection%c - %c%s at%c %s%c",
-        "devModeText": "%cDevMode%c - %c%s",
-        "listenerModeText": "%cListener%c - %c%s"
-      },
-      "colors": {
-        "bg": "transparent",
-        "textColor": "#fff",
+    "version": "0.0.1",
+    "defaultTheme": "whiteTheme",
+    "themes": {
+        "whiteTheme": {
+            "texts": {
+                "debugText": "%cDebug%c - %c%s",
+                "infoText": "%cInfo%c - %c%s",
+                "noticeText": "%cNotice%c - %c%s",
+                "warningText": "%cWarning%c - %c%s",
+                "errorText": "%cError%c - %c%s",
+                "criticalText": "%cCritical%c - %c%s",
+                "alertText": "%cAlert%c - %c%s",
+                "emergencyText": "%cEmergency%c - %c%s",
+                "securityText": "%cSecurity%c - %c%s",
+                "performanceText": "%cPerformance%c - %c%s",
+                "auditText": "%cAudit%c - %c%s",
+                "verboseText": "%cVerbose%c - %c%s",
+                "debug2Text": "%cDebug2%c - %c%s",
+                "debug3Text": "%cDebug3%c - %c%s",
 
-        "injectionBg": "#009AFA",
-        "injectionForeground": "#66C4FF",
-        "injectionText": "#000000",
-        "injectionSecondaryText": "#717880",
+                "injectionText": "%cInjection%c - %cInjected %s at %s",
+                "devModeText": "%cDevMode%c - %c%s",
+                "listenerModeText": "%cListener%c - %c%s"
+            },
+            "colors": {
+                "bg": "transparent",
+                "textColor": "#fff",
 
-        "devModeBg": "#FF4DCF",
-        "devModeForeground": "#FFA3E7",
-        "devModeText": "#000000",
-        "devModeSecondaryText": "#717880",
+                "bubble": "padding: 4px; border-radius: 4px; font-weight: bold;",
+                "foregroundBubble": "padding: 3px; border-radius: 3px; color: font-weight: normal;",
 
-        "listenerModeBg": "#FFF700",
-        "listenerModeForeground": "#FFFB7A",
-        "listenerModeText": "#000000",
-        "listenerModeSecondaryText": "#717880",
+                "debugBg": "#7E7E7E",
+                "debugForeground": "#66C4FF",
+                "debugText": "#000000",
 
-        "errorBg": "#FF0854",
-        "errorText": "#000000",
-        "errorPadding": "4px",
-        "errorBorderRadius": "4px",
-        "errorFontWeight": "bold"
-      }
+                "infoBg": "#00FF00",
+                "infoForeground": "#66FF66",
+                "infoText": "#000000",
+
+                "noticeBg": "#00FF00",
+                "noticeForeground": "#66FF66",
+                "noticeText": "#000000",
+
+                "warningBg": "#FFA500",
+                "warningForeground": "#FFD966",
+                "warningText": "#000000",
+
+                "injectionBg": "#009AFA",
+                "injectionForeground": "#66C4FF",
+                "injectionText": "#000000",
+
+                "devModeBg": "#FF4DCF",
+                "devModeForeground": "#FFA3E7",
+                "devModeText": "#000000",
+                "devModeSecondaryText": "#717880",
+
+                "listenerModeBg": "#FFF700",
+                "listenerModeForeground": "#FFFB7A",
+                "listenerModeText": "#000000",
+                "listenerModeSecondaryText": "#717880",
+
+                "errorBg": "#FF0854",
+                "errorText": "#000000",
+                "errorPadding": "4px",
+                "errorBorderRadius": "4px",
+                "errorFontWeight": "bold"
+            }
+        }
     }
-  }
 }

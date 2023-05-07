@@ -7,7 +7,7 @@
 
         "scripts": [
             {
-                "src": "data/cheat/scripts/helloWorld.js",
+                "src": "data/custom/scripts/helloWorld.js",
                 "async": false,
                 "module": false,
                 "destroy_when_complete": false
@@ -15,7 +15,7 @@
         ],
         "styles": [
             {
-                "href": "data/cheat/styles/style.css"
+                "href": "data/custom/styles/style.css"
             }
         ],
         "devMode": true
@@ -28,7 +28,7 @@
 
         "scripts": [
             {
-                "src": "data/cheat/scripts/nomRunHack.js"
+                "src": "data/custom/scripts/nomRunHack.js"
             }
         ]
     },
@@ -40,7 +40,7 @@
 
         "scripts": [
             {
-                "src": "data/cheat/scripts/LudumDare46Hack.js"
+                "src": "data/custom/scripts/LudumDare46Hack.js"
             }
         ]
     }

@@ -1,6 +1,12 @@
+/**
+ * Getting the main config for adding scripts and so.
+ * @returns {Promise<null|Object>} The config object or null if it fails
+ */
 async function refresh() {
     try {
-        const response = await fetch(chrome.runtime.getURL("data/cheats.json"));
+        const response = await fetch(
+            chrome.runtime.getURL("data/configForCustom.json")
+        );
         if (!response.ok) {
             throw new Error(`Failed to fetch: ${response.status}`);
         }
@@ -11,6 +17,10 @@ async function refresh() {
     return null;
 }
 
+/**
+ * Get the themes from the Styles.json file
+ * @returns {Promise<null|Object>} The config object or null if it fails
+ */
 async function refreshThemes() {
     try {
         const response = await fetch(chrome.runtime.getURL("data/Styles.json"));
@@ -24,6 +34,10 @@ async function refreshThemes() {
     return null;
 }
 
+/**
+ * Loading the keybindings from the keybindings.json file
+ * @returns {Promise<null|Object>} The config object or null if it fails
+ */
 async function loadKeybindings() {
     try {
         const response = await fetch(
@@ -39,6 +53,11 @@ async function loadKeybindings() {
     return null;
 }
 
+/**
+ * Finding the correct keybinding from the loadKeybindings().
+ * @param {*} keybinding
+ * @returns
+ */
 async function findKeybinding(keybinding) {
     try {
         const response = await loadKeybindings();
@@ -55,4 +74,9 @@ async function findKeybinding(keybinding) {
     } catch (error) {
         console.warn(error);
     }
+}
+
+async function loadLoggerLevels() {
+    importScripts("enums/LoggerLevels.js");
+    return LogLevel;
 }

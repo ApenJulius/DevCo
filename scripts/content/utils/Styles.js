@@ -1,52 +1,63 @@
-const getThemeInfo = async () => {
-  try {
-    return new Promise((resolve, reject) => {
-      chrome.runtime.sendMessage({ action: "getStyles" }, function (response) {
-        resolve(response);
-      });
-    });
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
+class Styles {
+    constructor() {
+        this.styles = null;
+    }
 
-async function getTheme(theme) {
-  try {
-    let info = await getThemeInfo();
-    return info.data.themes[theme];
-  } catch (error) {
-    console.warn(error);
-  }
-}
+    /**
+     * Loading all the styles.
+     */
+    async loadStyles() {
+        sendMessageBackend("GET", "getStyles").then((response) => {
+            this.styles = response ? response.data : null;
+        });
+    }
 
-async function colorStyles() {
-  let theme = await getTheme("whiteTheme");
+    /**
+     * Get the style for a specific theme and key
+     * @param {*} theme
+     * @param {*} key
+     * @returns
+     */
+    getStyle(theme, key) {
+        const themeData = this.styles?.themes?.[theme];
+        if (themeData) {
+            const styleData = themeData[key];
+            if (styleData) {
+                return styleData;
+            }
+        }
+        return null;
+    }
 
-  let styles = {
-    texts: {
-      injectionBubble: `background-color: ${theme.colors.injectionBg}; padding: 4px; border-radius: 4px; font-weight: bold; color: ${theme.colors.injectionText}`,
-      injectionRest: `background-color: ${theme.colors.injectionForeground}; padding: 3px; border-radius: 3px; color: ${theme.colors.injectionText}; font-weight: normal;`,
+    getFormattedText(theme, key, ...args) {
+        const styleData = this.getStyle(theme, "texts");
 
-      devModeBubble: `background-color: ${theme.colors.devModeBg}; padding: 4px; border-radius: 4px; font-weight: bold; color: ${theme.colors.devModeText}`,
-      devModeRest: `background-color: ${theme.colors.devModeForeground}; padding: 3px; border-radius: 3px; color: ${theme.colors.devModeText}; font-weight: normal;`,
+        const textFormat = styleData?.[key + "Text"];
 
-      listenerModeBubble: `background-color: ${theme.colors.listenerModeBg}; padding: 4px; border-radius: 4px; font-weight: bold; color: ${theme.colors.listenerModeText}`,
-      listenerModeRest: `background-color: ${theme.colors.listenerModeForeground}; padding: 3px; border-radius: 3px; color: ${theme.colors.listenerModeText}; font-weight: normal;`,
+        if (textFormat) {
+            const bubble =
+                this.getStyle(theme, "colors")?.bubble || "transparent";
+            const bubbleBg =
+                this.getStyle(theme, "colors")?.[key + "Bg"] || "transparent";
 
-      default: `background-color: transparent; padding: 0; color: ${theme.colors.textColor}; font-weight: normal;`,
-    },
-  };
-  return styles;
-}
+            const bubbleText = this.getStyle(theme, "colors")?.[key + "Text"];
 
-async function textTemplates() {
-  let theme = await getTheme("whiteTheme");
+            const foregroundBubble = this.getStyle(theme, "colors")?.[
+                "foregroundBubble"
+            ];
+            const foreground =
+                this.getStyle(theme, "colors")?.[key + "Foreground"] ||
+                "transparent";
 
-  let texts = {
-    injectionText: `${theme.texts.injectionText}`,
-    devModeText: `${theme.texts.devModeText}`,
-    listenerModeText: `${theme.texts.listenerModeText}`,
-  };
-  return texts;
+            const formattedArgs = args.map((arg) => `${arg}`);
+            const textStyles = [
+                `background-color: ${bubbleBg}; ${bubble}; color: ${bubbleText};`,
+                "background-color: transparent; color: black;",
+                `background-color: ${foreground}; ${foregroundBubble}; color: ${bubbleText};`,
+                ...formattedArgs,
+            ];
+            return [textFormat, ...textStyles];
+        }
+        return null;
+    }
 }
