@@ -1,5 +1,3 @@
-let savedLoggerLevels;
-
 // Define the message handler function
 function handleMessage(request, sender, sendResponse) {
     const messageHandler = new MessageHandler();
@@ -59,6 +57,8 @@ class InfoHandler extends MessageHandlerBase {
     handleMessage(request, sendResponse) {
         const action = this.actions[request.action];
         if (action) {
+            store.updateAllAvailableData();
+            console.log(store.getAll);
             const handler = new action();
             handler.handleMessage(request, sendResponse);
         } else {
@@ -108,7 +108,7 @@ class RefreshConnectionHandler extends MessageHandlerBase {
 
 class GetInformationHandler extends MessageHandlerBase {
     handleMessage(request, sendResponse) {
-        sendResponse({ data: savedData });
+        sendResponse({ data: store.getData("information") });
     }
 }
 
@@ -138,7 +138,7 @@ class ToggleExtensionHandler extends MessageHandlerBase {
 
 class GetLoggerLevelsHandler extends MessageHandlerBase {
     handleMessage(request, sendResponse) {
-        loadLoggerLevels();
+        let savedLoggerLevels = store.getData("loggerLevels");
         sendResponse({ data: savedLoggerLevels });
     }
 }

@@ -110,3 +110,11 @@ const LogLevel = Object.freeze({
         allowedArgs: false,
     },
 });
+
+const getLogLevel = (id = 1, name = "INFO") => {
+    return LogLevel[id] || LogLevel[name];
+};
+
+const getLogLevels = () => {
+    return Object.values(LogLevel);
+};

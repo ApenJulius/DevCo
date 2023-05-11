@@ -22,16 +22,7 @@ async function refresh() {
  * @returns {Promise<null|Object>} The config object or null if it fails
  */
 async function refreshThemes() {
-    try {
-        const response = await fetch(chrome.runtime.getURL("data/Styles.json"));
-        if (!response.ok) {
-            throw new Error(`Failed to fetch: ${response.status}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.warn(error);
-    }
-    return null;
+
 }
 
 /**
@@ -76,7 +67,3 @@ async function findKeybinding(keybinding) {
     }
 }
 
-async function loadLoggerLevels() {
-    importScripts("enums/LoggerLevels.js");
-    return LogLevel;
-}
