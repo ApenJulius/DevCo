@@ -1,5 +1,3 @@
-import { toJSON } from "flattened";
-
 // Select all the buttons and page divs
 const buttons = document.querySelectorAll("#btn");
 const pages = document.querySelectorAll(".page");
@@ -112,7 +110,32 @@ function sendCommand(value) {
         consoleOutput.appendChild(consoleOutputText);
         consoleOutputWrapper.appendChild(consoleOutput);
 
-        consoleOutputText.innerText = result.result;
+        function getCircularReplacer() {
+            const ancestors = [];
+            return function (key, value) {
+                if (typeof value !== "object" || value === null) {
+                    return value;
+                }
+                while (ancestors.length > 0 && ancestors.at(-1) !== this) {
+                    ancestors.pop();
+                }
+                if (ancestors.includes(value)) {
+                    return "[Circular]";
+                }
+                ancestors.push(value);
+                return value;
+            };
+        }
+
+        const exampleResult = JSON.stringify(
+            result.result,
+            getCircularReplacer(),
+            4
+        );
+
+        console.log("Example result: ", exampleResult);
+
+        consoleOutputText.innerText = exampleResult;
         document
             .getElementById("customConsole")
             .appendChild(consoleOutputWrapper);
