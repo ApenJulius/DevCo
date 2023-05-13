@@ -1,144 +1,120 @@
-// Define the message handler function
-function handleMessage(request, sender, sendResponse) {
-    const messageHandler = new MessageHandler();
-    messageHandler.handleMessage(request, sendResponse);
+class MessageHandler {
+    async handleMessage(request) {
+        // handle the incoming message here
+        try {
+            const requestID = request.requestId;
+            const handlerMes = new MessageExecutor();
+            const response = await handlerMes.handleMessage(request);
+            return { response: response, requestID: requestID };
+        } catch (error) {
+            console.error(error);
+        }
+    }
 }
 
-// Add a listener for incoming messages from content scripts
-chrome.runtime.onMessage.addListener(handleMessage);
+class Connection {
+    constructor() {
+        this.ports = new Set();
+        this.messageHandler = new MessageHandler();
 
-class MessageHandler {
+        chrome.runtime.onConnect.addListener((port) => {
+            this.handleConnect(port);
+        });
+    }
+
+    handleConnect(port) {
+        this.ports.add(port);
+
+        port.onMessage.addListener(async (message) => {
+            try {
+                const response = await this.messageHandler.handleMessage(
+                    message
+                );
+                port.postMessage(response);
+            } catch (error) {
+                console.error("Error handling message:", error);
+            }
+        });
+
+        port.onDisconnect.addListener(() => {
+            this.handleDisconnect(port);
+        });
+    }
+
+    handleDisconnect(port) {
+        this.ports.delete(port);
+    }
+}
+
+new Connection();
+
+class MessageExecutor {
     constructor() {
         this.types = {
-            GET: InfoHandler,
-            POST: ExecutionHandler,
+            GET: "Getting information",
+            POST: "Executing action",
+        };
+
+        this.actions = {
+            information: informationHandler,
+            keybinds: keybindsHandler,
+            styles: stylesHandler,
+            loggerlevels: loggerLevelsHandler,
         };
     }
 
     // Define the handler function for incoming messages
-    handleMessage(request, sendResponse) {
-        console.log(request);
-        console.log(this.types);
-        const action = this.types[request.type];
+    async handleMessage(request) {
+        const action = this.actions[request.action];
         if (action) {
             const handler = new action();
-            handler.handleMessage(request, sendResponse);
+            const response = await handler.handleMessage(request);
+            return response;
         } else {
             console.error(`Unknown type: ${request.type}`);
-            sendResponse({ error: `Unknown type: ${request.type}` });
+            return { error: `Unknown type: ${request.type}` };
         }
     }
 }
 
 // Define the base class for all handlers
 class MessageHandlerBase {
-    handleMessage(request, sendResponse) {
+    async handleMessage(request) {
         console.error(
             `Message handler for '${this.constructor.name}' is not implemented.`
         );
-        sendResponse({ error: "Not implemented." });
+        return { error: "Not implemented." };
     }
 }
 
-/**
- * Handle information queries
- */
-class InfoHandler extends MessageHandlerBase {
-    constructor() {
-        super();
-        this.actions = {
-            getInformation: GetInformationHandler,
-            getKeybinds: GetKeybindsHandler,
-            getStyles: GetStylesHandler,
-            getLoggerLevels: GetLoggerLevelsHandler,
-        };
-    }
-
-    handleMessage(request, sendResponse) {
-        const action = this.actions[request.action];
-        if (action) {
-            store.updateAllAvailableData();
-            console.log(store.getAll);
-            const handler = new action();
-            handler.handleMessage(request, sendResponse);
-        } else {
-            console.error(`Unknown query: ${request.action}`);
-            sendResponse({ error: `Unknown query: ${request.action}` });
+class informationHandler extends MessageHandlerBase {
+    async handleMessage(request) {
+        if (request.type === "GET") {
+            return { data: await hashTable.get("information") };
         }
     }
 }
 
-/**
- * Handle execution queries
- */
-class ExecutionHandler extends MessageHandlerBase {
-    constructor() {
-        super();
-        this.actions = {
-            refreshConnection: RefreshConnectionHandler,
-            analysisInformation: AnalysisInformationHandler,
-            toggleExtension: ToggleExtensionHandler,
-        };
-    }
-
-    handleMessage(request, sendResponse) {
-        const action = this.actions[request.action];
-        if (action) {
-            const handler = new action();
-            handler.handleMessage(request, sendResponse);
-        } else {
-            console.error(`Unknown action: ${request.action}`);
-            sendResponse({ error: `Unknown action: ${request.action}` });
+class stylesHandler extends MessageHandlerBase {
+    async handleMessage(request) {
+        if (request.type === "GET") {
+            return { data: await hashTable.get("styles") };
         }
     }
 }
 
-// Define the handler classes for each action
-class TestConnectionHandler extends MessageHandlerBase {
-    handleMessage(request, sendResponse) {
-        sendResponse({ status: "ok" });
+class keybindsHandler extends MessageHandlerBase {
+    async handleMessage(request) {
+        if (request.type === "GET") {
+            return { data: await hashTable.get("keybinds") };
+        }
     }
 }
 
-class RefreshConnectionHandler extends MessageHandlerBase {
-    handleMessage(request, sendResponse) {
-        sendResponse({ status: "ok" });
-    }
-}
-
-class GetInformationHandler extends MessageHandlerBase {
-    handleMessage(request, sendResponse) {
-        sendResponse({ data: store.getData("information") });
-    }
-}
-
-class AnalysisInformationHandler extends MessageHandlerBase {
-    handleMessage(request, sendResponse) {
-        sendResponse({ data: savedData });
-    }
-}
-
-class GetStylesHandler extends MessageHandlerBase {
-    handleMessage(request, sendResponse) {
-        sendResponse({ data: savedThemes });
-    }
-}
-
-class GetKeybindsHandler extends MessageHandlerBase {
-    handleMessage(request, sendResponse) {
-        sendResponse({ data: savedKeybinds });
-    }
-}
-
-class ToggleExtensionHandler extends MessageHandlerBase {
-    handleMessage(request, sendResponse) {
-        sendResponse({ status: "ok" });
-    }
-}
-
-class GetLoggerLevelsHandler extends MessageHandlerBase {
-    handleMessage(request, sendResponse) {
-        let savedLoggerLevels = store.getData("loggerLevels");
-        sendResponse({ data: savedLoggerLevels });
+class loggerLevelsHandler extends MessageHandlerBase {
+    async handleMessage(request) {
+        if (request.type === "GET") {
+            return { data: await hashTable.get("loggerLevels") };
+        }
     }
 }

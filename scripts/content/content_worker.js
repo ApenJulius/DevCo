@@ -10,10 +10,15 @@ const logger = new Logger({
 });
 
 const getInfo = async () => {
-    return await sendMessageBackend("GET", "getInformation");
+    try {
+        const response = await queueSystem.sendMessage("GET", "information");
+        console.log(response.data);
+        return response;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
 };
-
-const filter = async (data) => {};
 
 async function handleWebsite(url) {
     try {
@@ -152,9 +157,14 @@ const toggleListenerMode = (listenerMode) => {
 };
 
 async function handleKeybinds() {
-    sendMessageBackend("GET", "getKeybinds").then((response) => {
+    try {
+        const response = await queueSystem.sendMessage("GET", "keybinds");
+        console.log(response.data);
         return response.data;
-    });
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
 }
 
 window.onload = () => {

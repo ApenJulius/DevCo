@@ -1,12 +1,12 @@
 importScripts("manager/Globals.js");
 
 // ? Handling refresh.
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener(async () => {
     console.log("On Installed");
-    store.updateAllAvailableData();
+    await hashTable._loadAll();
 });
 
-chrome.runtime.onStartup.addListener(() => {
+chrome.runtime.onStartup.addListener(async () => {
     console.log("On Startup");
-    store.updateAllAvailableData();
+    await hashTable._loadAll();
 });

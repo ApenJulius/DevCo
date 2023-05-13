@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "DevCo",
-    "version": "1.0",
+    "version": "0.0.2",
     "description": "DevCo is a Chrome extension designed to help developers with various tasks. The extension includes a range of features to assist with coding, debugging, testing, and optimization of websites and web applications. With DevCo, you can improve your productivity and streamline your development workflow.",
 
     "host_permissions": ["*://*/*"],
@@ -20,7 +20,6 @@
                 "scripts/content/utils/utils.js",
 
                 "scripts/content/utils/Styles.js",
-                "scripts/content/enums/LoggerLevels.js",
                 "scripts/content/utils/Logger.js",
 
                 "scripts/content/utils/Keybinds.js",

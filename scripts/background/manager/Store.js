@@ -1,123 +1,117 @@
-class Store {
+class SessionStorage {
     constructor() {
+        this.data = {};
         importScripts("manager/Loader.js");
 
         this.loader = new Loader();
+        this.sessionStorage = chrome.storage.session;
+    }
 
-        this.request = indexedDB.open("DevCo", 1);
+    async set(key, value) {
+        this.sessionStorage.set({ key: value }).then(() => {
+            this.data[key] = value;
+        });
+    }
 
-        this.request.onerror = (event) => {
-            console.error("Database error: " + event.target.errorCode);
-        };
-
-        this.request.onupgradeneeded = (event) => {
-            this.db = event.target.result;
-            const objectStore = db.createObjectStore("data", { keyPath: "id" });
-            objectStore.createIndex("name", "name", { unique: false });
-            objectStore.createIndex("timestamp", "timestamp", {
-                unique: false,
+    get(key) {
+        if (this.data[key] !== undefined) {
+            return this.data[key];
+        } else {
+            this.sessionStorage.get([key]).then((result) => {
+                this.data[key] = result[key];
+                return this.data[key];
             });
-        };
-
-        this.request.onsuccess = (event) => {
-            this.db = event.target.result;
-        };
-
-        this.db = this.request;
-
-        console.log(this.db);
+        }
     }
 
-    addData(key, data) {
-        const transaction = this.db.transaction([key], "readwrite");
-        const objectStore = transaction.objectStore(key);
-        const request = objectStore.add(data);
+    clear() {
+        try {
+            this.sessionStorage.clear().then(() => {
+                this.data = {};
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+}
 
-        request.onerror = function (event) {
-            console.error("Error adding data: ", event.target.error);
-        };
+class HashTable {
+    constructor(size) {
+        this.table = new Array(size);
+        this.size = size;
+        importScripts("manager/Loader.js");
 
-        request.onsuccess = function (event) {
-            console.log("Data added successfully");
-        };
+        this.loader = new Loader();
     }
 
-    updateData(key, data) {
-        const transaction = this.db.transaction([key], "readwrite");
-        const objectStore = transaction.objectStore(key);
-        const request = objectStore.put(data);
-
-        request.onerror = function (event) {
-            console.error("Error updating data: ", event.target.error);
-        };
-
-        request.onsuccess = function (event) {
-            console.log("Data updated successfully");
-        };
+    async hash(key) {
+        let total = 0;
+        for (let i = 0; i < key.length; i++) {
+            total += key.charCodeAt(i);
+        }
+        return total % this.size;
     }
 
-    removeData(key, id) {
-        const transaction = this.db.transaction([key], "readwrite");
-        const objectStore = transaction.objectStore(key);
-        const request = objectStore.delete(id);
-
-        request.onerror = function (event) {
-            console.error("Error removing data: ", event.target.error);
-        };
-
-        request.onsuccess = function (event) {
-            console.log("Data removed successfully");
-        };
+    async set(key, value) {
+        const index = this.hash(key);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[key, value]];
+        } else {
+            const sameKeyItem = bucket.find((item) => item[0] === key);
+            if (sameKeyItem) {
+                sameKeyItem[1] = value;
+            } else {
+                bucket.push([key, value]);
+            }
+        }
     }
 
-    getData(key, id) {
-        const transaction = this.db.transaction([key], "readonly");
-        const objectStore = transaction.objectStore(key);
-        const request = objectStore.get(id);
-
-        request.onerror = function (event) {
-            console.error("Error getting data: ", event.target.error);
-        };
-
-        request.onsuccess = function (event) {
-            const data = event.target.result;
-            console.log("Data retrieved successfully: ", data);
-        };
+    async get(key) {
+        const index = this.hash(key);
+        const bucket = this.table[index];
+        if (bucket) {
+            const sameKeyItem = bucket.find((item) => item[0] === key);
+            if (sameKeyItem) {
+                console.log(sameKeyItem[1]);
+                return sameKeyItem[1];
+            }
+        }
+        return undefined;
     }
 
-    getAllData(key) {
-        const transaction = this.db.transaction([key], "readonly");
-        const objectStore = transaction.objectStore(key);
-        const request = objectStore.getAll();
-
-        request.onerror = function (event) {
-            console.error("Error getting all data: ", event.target.error);
-        };
-
-        request.onsuccess = function (event) {
-            const data = event.target.result;
-            console.log("All data retrieved successfully: ", data);
-        };
+    async remove(key) {
+        let index = this.hash(key);
+        const bucket = this.table[index];
+        if (bucket) {
+            const sameKeyItem = bucket.find((item) => item[0] === key);
+            if (sameKeyItem) {
+                bucket.splice(bucket.indexOf(sameKeyItem), 1);
+            }
+        }
     }
 
-    clearData(key) {
-        const transaction = this.db.transaction([key], "readwrite");
-        const objectStore = transaction.objectStore(key);
-        const request = objectStore.clear();
-
-        request.onerror = function (event) {
-            console.error("Error clearing data: ", event.target.error);
-        };
-
-        request.onsuccess = function (event) {
-            console.log("Data cleared successfully");
-        };
+    async clear() {
+        this.table = new Array(this.size);
     }
 
-    updateAllAvailableData() {
-        this.updateData("styles", this.loader.loadStyles());
-        this.updateData("keybinds", this.loader.loadKeybinds());
-        this.updateData("information", this.loader.loadInformation());
-        this.updateData("loggerLevels", this.loader.loadLoggerLevels());
+    async display() {
+        for (let i = 0; i < this.table.length; i++) {
+            if (this.table[i]) {
+                console.log(i, this.table[i]);
+            }
+        }
+    }
+
+    async _loadAll() {
+        const keyBinds = await this.loader.loadKeybinds();
+        const styles = await this.loader.loadStyles();
+        const information = await this.loader.loadInformation();
+        const loggerLevels = await this.loader.loadLoggerLevels();
+
+        this.set("keybinds", keyBinds);
+        this.set("styles", styles);
+        this.set("information", information);
+        this.set("loggerLevels", loggerLevels);
     }
 }

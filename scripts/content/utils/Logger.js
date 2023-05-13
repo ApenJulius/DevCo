@@ -1,11 +1,22 @@
+async function LogLevel() {
+    const f = await queueSystem.sendMessage("GET", "loggerlevels");
+    return f.data;
+}
+
 class Logger {
     constructor(options) {
         this.options = options || {};
         this.styleHandler = new Styles() || null;
         this.styleHandler.loadStyles();
+        this.logLevels = null;
+        this.setLogLevels();
     }
 
-    log(message, level = LogLevel.INFO, ...args) {
+    async setLogLevels() {
+        this.logLevels = (await LogLevel()) || null;
+    }
+
+    log(message, level = this.logLevels.INFO, ...args) {
         const formattedMessage = this.formatMessage(message, level, ...args);
         this.writeLog(formattedMessage);
     }

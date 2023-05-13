@@ -49,7 +49,10 @@ const listenForKeybinds = (keybind, action) => {
 };
 
 const PREDEFINED_ACTIONS = {
-    "extension.toggle": sendMessageBackend("toggleExtension"),
+    "extension.toggle": await queueSystem.sendMessage(
+        "POST",
+        "toggleExtension"
+    ),
 };
 
 // Disable the listener by default

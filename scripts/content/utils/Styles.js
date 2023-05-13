@@ -7,9 +7,12 @@ class Styles {
      * Loading all the styles.
      */
     async loadStyles() {
-        sendMessageBackend("GET", "getStyles").then((response) => {
+        try {
+            const response = await queueSystem.sendMessage("GET", "styles");
             this.styles = response ? response.data : null;
-        });
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     /**

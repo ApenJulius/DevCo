@@ -43,7 +43,7 @@ class Loader {
     async loadInformation() {
         try {
             const response = await fetch(
-                chrome.runtime.getURL("data/cheats.json")
+                chrome.runtime.getURL("data/configForCustom.json")
             );
             if (!response.ok) {
                 throw new Error(`Failed to fetch: ${response.status}`);
